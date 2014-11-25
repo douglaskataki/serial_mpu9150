@@ -5,7 +5,7 @@ Using http://wjwwood.io/serial/ library and FreeIMU library (http://www.varesano
 
 Instructions:
 
-git clone https://github.com/douglaskataki/serial_mpu9150
+git clone https://github.com/douglaskataki/serial_mpu9150 '/n'
 cd ~/catkin/src
 make
 
