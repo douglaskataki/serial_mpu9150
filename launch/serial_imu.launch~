@@ -1,0 +1,5 @@
+<launch>
+	<node pkg="serial_mpu" name="serial_node" type="serial_node" output="screen" required="true" />
+	<node pkg="serial_mpu" name="serial_imu" type="serial_imu" />
+	<node pkg="rviz" name="view_imu" type="rviz" args="-f my_frame" />
+</launch>

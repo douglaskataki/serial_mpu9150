@@ -1,0 +1,18 @@
+<package>
+  <name>serial_mpu</name>
+  <version>1.2.4</version>
+  <description>Using http://wjwwood.io/serial/ library with MPU9150 and Adafruit MPL115A2</description>
+
+  <author email="douglaskataki@hotmail.com">Douglas Kataki</author>
+
+  <maintainer email="douglaskataki@hotmail.com">Douglas Kataki</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>serial</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <run_depend>serial</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+</package>
