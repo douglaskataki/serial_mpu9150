@@ -1,7 +1,7 @@
 serial_mpu9150
 ==============
 
-Using http://wjwwood.io/serial/ library and FreeIMU library (changed some aspects) with MPU9150 and Adafruit MPL115A2, integrated with ROS.
+Using serial library (http://wjwwood.io/serial/) and FreeIMU library (changed some aspects) with MPU9150 and Adafruit MPL115A2, integrated with ROS.
 
 
 ### Install Instructions
