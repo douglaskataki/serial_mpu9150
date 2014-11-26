@@ -1,20 +1,27 @@
 serial_mpu9150
 ==============
 
-Using http://wjwwood.io/serial/ library and FreeIMU library (http://www.varesano.net/projects/hardware/FreeIMU) with MPU9150 and Adafruit MPL115A2, integrated with ROS.
+Using http://wjwwood.io/serial/ library and FreeIMU library (changed some aspects) with MPU9150 and Adafruit MPL115A2, integrated with ROS.
 
 
-
-### Install
+### Install Instructions
 
 Get the code: 
 
-    clone https://github.com/douglaskataki/serial_mpu9150
+    git clone https://github.com/douglaskataki/serial_mpu9150
 
-Change directory (or the your src on your catkin_workspace)
+Change directory (or the your src on your catkin_workspace):
 
     cd ~/catkin/src
+    
+Make a directory:
 
+    mkdir serial_mpu
+    
+Change to the new dir:
+
+    cd serial_mpu
+    
 Build:
 
     make
