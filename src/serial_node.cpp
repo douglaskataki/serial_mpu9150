@@ -7,7 +7,8 @@
 #define BAUDRATE 57600 //Define your baudrate here!
 
 using std::string;
-int burst=122,cont;
+int cont;
+static int burst=50; //must be the same as the arduino code
 serial::Serial ser; //Serial object created
 
 void write_callback(const std_msgs::String::ConstPtr& msg){
