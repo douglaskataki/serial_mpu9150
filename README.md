@@ -6,6 +6,9 @@ Thanks to Gary Servin who made the example of using the serial library with ROS.
 
 Links bellow:
 Serial Library: http://wjwwood.io/serial/
+
 Gary Servin's source code: https://github.com/garyservin/serial-example
+
 Adafruit MPL115A2: https://github.com/adafruit/Adafruit_MPL115A2
+
 FreeIMU library: http://www.varesano.net/files/FreeIMU-20121122_1126.zip
