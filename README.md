@@ -5,6 +5,7 @@ Using serial library and FreeIMU library with the sensors MPU9150 and Adafruit M
 Thanks to Gary Servin who made the example of using the serial library with ROS.
 
 Links bellow:
+
 Serial Library: http://wjwwood.io/serial/
 
 Gary Servin's source code: https://github.com/garyservin/serial-example
