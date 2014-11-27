@@ -2,7 +2,8 @@ serial_mpu9150
 ==============
 
 Using serial library and FreeIMU library with the sensors MPU9150 and Adafruit MPL115A2, integrated with ROS. Got the processing code found inside the FreeIMU library and translate Java coding to C++ so it could be used with the serial library.
-Thanks to Gary Servin who made the example of using the serial library with ROS.
+
+Thanks to Gary Servin who made the a simple example using the serial library with ROS.
 
 Links bellow:
 
