@@ -54,7 +54,7 @@ int main (int argc, char** argv){
         // my_sleep(20);
         // ser.write("z");
         ROS_INFO_STREAM(ser.available());
-        my_sleep(500); //200ms
+        my_sleep(500); //500ms
         cont=0;
         
     }
