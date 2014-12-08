@@ -1,5 +1,10 @@
 <launch>
-	<node pkg="serial_mpu" name="serial_node" type="serial_node" output="screen" required="true" />
-	<node pkg="serial_mpu" name="mpu_rviz" type="mpu_rviz" />
+	<!-- Set here your Serial Port, you can set output="screen" to see -->
+	<!-- the print at the terminal console-->
+	<node pkg="serial_example" name="serial_example" type="serial_example_node" output="screen" required="true" 
+		 args="/dev/ttyACM0 57600"/>
+	<!-- Serial imu node -->
+	<node pkg="serial_example" name="serial_imu" type="serial_imu" />
+	<!-- Rviz -->
 	<node pkg="rviz" name="view_imu" type="rviz" args="-f my_frame" />
 </launch>
