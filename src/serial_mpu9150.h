@@ -11,7 +11,7 @@
 #define MATH_PI 3.14159265 //using PI
 
 
-/*Code Float to hex string used in Arduino FreeIMU library
+/*//Code Float to hex string used in Arduino FreeIMU library
 void codeFloat(float f) {
   int8_t * b = (int8_t *) &f;
   for(int i=0; i<4; i++) {
@@ -28,48 +28,25 @@ void codeFloat(float f) {
 
 //http://linux.die.net/man/3/usleep
 void my_sleep(unsigned long milliseconds){
-   usleep(milliseconds*1000); // 100 ms
+   usleep(milliseconds*1000);
 }
 
-//function Temperature to RGB
-void TmpToRGB(float tmp,float color[3], float first, float end){
-  float aux=(end-first)/5; //seven divisions, looking for the rainbow colors, 
-                           //see -> http://simple.wikipedia.org/wiki/Rainbow
-  if(tmp<=first) {
-    //violet color
-    color[0] = 143.0/255.0;  color[1] = 0.0/255.0; color[2] =255.0/255.0;
+//Temperature Blue to Red, made it linear and didn't test other types
+void BlueToRed(float color[3],float temp,float tmin,float tmax){
+  float f;
+  float tmid = (tmax-tmin)/2;
+  if(temp<tmid){ //scale from blue(0,0,1) to yellow(1,1,0)
+    f = (temp-tmin)/(tmid-tmin);
+    color[0]=f;
+    color[1]=f;
+    color[2]=1-f;
   }
-
-  else if(tmp>first&&tmp<first+aux){
-    //indigo color
-    color[0] = 75.0/255.0;  color[1]= 0.0/255.0; color[2] =130.0/255.0;
+  else{ //yellow(1,1,0) to red(1,0,0)
+    f = (temp-tmid)/(tmax-tmid);
+    color[0]=1.0f; 
+    color[1]=1-f;
+    color[2]=0.0f;
   }
-
-  else if(tmp>first+aux&&tmp<first+2*aux){
-    //blue color
-    color[0] = 0.0/255.0;  color[1]= 0.0/255.0; color[2] =255.0/255.0;
-  }
-
-  else if(tmp>first+2*aux&&tmp<first+3*aux){
-    //green color
-    color[0] = 0.0/255.0;  color[1]= 255.0/255.0; color[2] =0.0/255.0;
-  }
-
-  else if(tmp>first+3*aux&&tmp<first+4*aux){
-    //yellow color
-    color[0] = 255.0/255.0;  color[1]= 255.0/255.0; color[2] =0.0/255.0;
-  }
-
-  else if(tmp>first+4*aux&&tmp<first+5*aux){
-    //orange color
-    color[0] = 255.0/255.0;  color[1]= 127.0/255.0; color[2] =0.0/255.0;
-  }
-
-  else{
-    //red color
-    color[0] = 255.0/255.0; color[1] = 0.0/255.0; color[2] =0.0/255.0;
-  }
-
 }
 
 //Decoder hex string to float number
@@ -82,13 +59,13 @@ float DecodeFloat(std::string inString){
     c[j] = inString[j+4];
     d[j] = inString[j+6];
   }
-
+  //transform string into an hex
   inData[0] = (int8_t)strtol(a,NULL,16);
   inData[1] = (int8_t)strtol(b,NULL,16);
   inData[2] = (int8_t)strtol(c,NULL,16);
   inData[3] = (int8_t)strtol(d,NULL,16);
 
-  //magic trick to transform int8 into int :)
+  //magic trick
   int bits = (inData[3] << 24) | ((inData[2] & 0xff) << 16) | 
   ((inData[1] & 0xff) << 8) | (inData[0] & 0xff);
 
@@ -208,70 +185,57 @@ void GetData(std::string inString,float v[16]){
     }
 }
 
-// void Rot(float x,float y, float z,float w,float *nx,float *ny, float *nz,float *nw, float ang){
-//   float lx,ly,lz,lw;
-//   ang = ang/360*(float)MATH_PI*2; //change to degrees to rad
-//   //local rotations for the y axis
-//   lw = cos(ang/2);
-//   lx = x*sin(ang/2);
-//   ly = y*sin(ang/2);
-//   lz = z*sin(ang/2);
-//   *nx = lx*((1-2*y*y-2*z*z)+ly*(2*x*y+2*w*z)+lz*(2*x*z-2*w*y));
-//   std::cout<<"rotx="<<*nx<<",";
-//   *ny = lx*((2*x*y-2*w*z)+ly*(1-2*x*x-2*z*z)+lz*(2*y*z-2*w*x));
-//   std::cout<<"roty="<<*ny<<",";
-//   *nz = lx*((2*x*z+2*w*y)+ly*(2*y*z+2*w*x)+lz*(1-2*x*x-2*y*y));
-//   std::cout<<"rotz="<<*nz<<",";
-//   *nw = lw;
-//   std::cout<<"rotw="<<*nw<<"\n";
-// }
-
-
-// void quaternionToEuler(float q[4], float euler[3]) {
+// void quaternionToEuler(float q[4], float euler[3]) { //pitch, yaw and roll
 //   euler[0] = atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0]*q[0] + 2 * q[1] * q[1] - 1); // psi
 //   euler[1] = -asin(2 * q[1] * q[3] + 2 * q[0] * q[2]); // theta
 //   euler[2] = atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1); // phi
 // }
 
-// float *quatProd(float a[4], float b[4]) {
-//   float q[4];
-  
-//   q[0] = a[0] * b[0] - a[1] * b[1] - a[2] * b[2] - a[3] * b[3];
-//   q[1] = a[0] * b[1] + a[1] * b[0] + a[2] * b[3] - a[3] * b[2];
-//   q[2] = a[0] * b[2] - a[1] * b[3] + a[2] * b[0] + a[3] * b[1];
-//   q[3] = a[0] * b[3] + a[1] * b[2] - a[2] * b[1] + a[3] * b[0];
-  
-//   return q;
-// }
+void setToQuat(float x, float y, float z,float w, float quat[4]){
+  quat[0]=x;
+  quat[1]=y;
+  quat[2]=z;
+  quat[3]=w;
+}
 
-// // returns a quaternion from an axis angle representation
-// float *quatAxisAngle(float axis[3], float angle) {
-//   float q[4];
-  
-//   float halfAngle = angle / 2.0;
-//   float sinHalfAngle = sin(halfAngle);
-//   q[0] = cos(halfAngle);
-//   q[1] = -axis[0] * sinHalfAngle;
-//   q[2] = -axis[1] * sinHalfAngle;
-//   q[3] = -axis[2] * sinHalfAngle;
-  
-//   return q;
-// }
+// (Q1 * Q2).x = (w1x2 + x1w2 + y1z2 - z1y2)
+// (Q1 * Q2).y = (w1y2 - x1z2 + y1w2 + z1x2)
+// (Q1 * Q2).z = (w1z2 + x1y2 - y1x2 + z1w2)
+// (Q1 * Q2).w = (w1w2 - x1x2 - y1y2 - z1z2)
 
-// // return the quaternion conjugate of quat
-// float *quatConjugate(float quat[4]) {
-//   float conj[4];
+void quatProd(float a[4], float b[4], float q[4]) {
   
-//   conj[0] = quat[0];
-//   conj[1] = -quat[1];
-//   conj[2] = -quat[2];
-//   conj[3] = -quat[3];
+  q[0] = a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1]; //x
+  q[1] = a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0]; //y
+  q[2] = a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3]; //z
+  q[3] = a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]; //w
   
-//   return conj;
-// }
+}
+
+// returns a quaternion from an axis angle representation, angle in degrees
+void quatAxisAngle(float axis[3], float angle, float q[4]) {
+  angle = angle*MATH_PI/180;
+  float halfAngle = angle / 2.0;
+  float sinHalfAngle = sin(halfAngle);
+  q[0] = -axis[0] * sinHalfAngle;
+  q[1] = -axis[1] * sinHalfAngle;
+  q[2] = -axis[2] * sinHalfAngle;
+  q[3] = cos(halfAngle);
+}
+
+// return the quaternion conjugate of quat
+void quatConjugate(float quat[4], float conj[4]) {
+
+  conj[0] = -quat[0];
+  conj[1] = -quat[1];
+  conj[2] = -quat[2];
+  conj[3] = quat[3];
+}
+
+/*!!!Please, modify this section to be suitable to C++!!!*/
 
 // /////////////////////////////////////////////////////////////////////////
-// void getYawPitchRollRad(float *q,float *ypr) {
+// void getYawPitchRollRad(float q[4],float ypr[3]) {
 //   //float q[4]; // quaternion
 //   float gx, gy, gz; // estimated gravity direction
   
@@ -291,7 +255,7 @@ void GetData(std::string inString,float v[16]){
 // // which is based on 
 // //
 // //=========================================================
-// float calcMagHeading(){
+// float calcMagHeading(float ypr[3]){
 //   float Head_X;
 //   float Head_Y;
 //   float cos_roll;
@@ -308,7 +272,7 @@ void GetData(std::string inString,float v[16]){
 //   //Xh = bx * cos(theta) + by * sin(phi) * sin(theta) + bz * cos(phi) * sin(theta)
 //   //Yh = by * cos(phi) - bz * sin(phi)
 //   //return wrap((atan2(-Yh, Xh) + variation))
-    
+      
 //   // Tilt compensated Magnetic field X component:
 //   Head_X = magn[0]*cos_pitch+magn[1]*sin_roll*sin_pitch+magn[2]*cos_roll*sin_pitch;
 //   // Tilt compensated Magnetic field Y component:
